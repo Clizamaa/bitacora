@@ -8,13 +8,19 @@
     "start": "next start"
   },
   "dependencies": {
+    "jspdf": "^4.0.0",
+    "jspdf-autotable": "^5.0.7",
+    "lucide-react": "^0.559.0",
     "next": "16.0.8",
     "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "react-dom": "19.2.1",
+    "sweetalert2": "^11.26.17"
   },
   "devDependencies": {
+    "@prisma/client": "^5.10.0",
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",
+    "prisma": "^5.10.0",
     "tailwindcss": "^4"
   }
 }
