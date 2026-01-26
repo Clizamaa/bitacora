@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import { Server, Clock, Building2, User, FileText, CheckCircle2, CreditCard, UserCheck } from "lucide-react"
+import { useState, useRef } from "react"
+import { Server, Clock, Building2, User, FileText, CheckCircle2, CreditCard, UserCheck, Keyboard } from "lucide-react"
+import TecladoVirtual from "@/components/teclado-virtual"
 
 const Card = ({ className, children }) => <div className={className}>{children}</div>
 const CardHeader = ({ className, children }) => <div className={className}>{children}</div>
@@ -24,6 +25,8 @@ export function ServerLogForm({ onVisitRegistered }) {
     motivo: "",
   })
   const [submitted, setSubmitted] = useState(false)
+  const [activeField, setActiveField] = useState(null)
+  const [showKeyboard, setShowKeyboard] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -31,6 +34,7 @@ export function ServerLogForm({ onVisitRegistered }) {
       onVisitRegistered(formData)
     }
     setSubmitted(true)
+    setShowKeyboard(false)
 
     // Resetear formulario después de 4 segundos
     setTimeout(() => {
@@ -43,6 +47,7 @@ export function ServerLogForm({ onVisitRegistered }) {
         horaInicio: "",
         motivo: "",
       })
+      setActiveField(null)
     }, 4000)
   }
 
@@ -53,8 +58,37 @@ export function ServerLogForm({ onVisitRegistered }) {
     })
   }
 
+  const handleFieldFocus = (fieldName) => {
+    setActiveField(fieldName)
+    setShowKeyboard(true)
+  }
+
+  const handleVirtualKeyPress = (key) => {
+    if (!activeField) return
+    setFormData(prev => ({
+      ...prev,
+      [activeField]: prev[activeField] + key
+    }))
+  }
+
+  const handleVirtualBackspace = () => {
+    if (!activeField) return
+    setFormData(prev => ({
+      ...prev,
+      [activeField]: prev[activeField].slice(0, -1)
+    }))
+  }
+
+  const handleVirtualSpace = () => {
+    if (!activeField) return
+    setFormData(prev => ({
+      ...prev,
+      [activeField]: prev[activeField] + " "
+    }))
+  }
+
   return (
-    <Card className="w-full max-w-5xl relative z-10 border border-border/50 shadow-xl bg-card/95 rounded-2xl overflow-hidden">
+    <Card className="w-full max-w-5xl relative z-10 border border-border/50 shadow-xl bg-card/95 rounded-2xl">
       <div className="md:grid md:grid-cols-12">
         <div className="relative hidden md:block md:col-span-5 bg-secondary/15 border-r border-border/50">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(124, 156, 64, 0.93),transparent_60%)]" />
@@ -109,10 +143,21 @@ export function ServerLogForm({ onVisitRegistered }) {
                           placeholder="Ej: 12.345.678-9"
                           value={formData.rut}
                           onChange={handleChange}
+                          onFocus={() => handleFieldFocus("rut")}
                           required
                           className="bg-input border-border focus:outline-none focus:ring-2 focus:ring-primary/20 pl-10 pr-4 h-10 rounded-xl transition w-full"
                         />
                       </div>
+                      {showKeyboard && activeField === "rut" && (
+                        <div className="absolute top-full left-0 z-50 w-[90vw] md:w-[500px] animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
+                          <TecladoVirtual
+                            onKeyPress={handleVirtualKeyPress}
+                            onBackspace={handleVirtualBackspace}
+                            onSpace={handleVirtualSpace}
+                            onClose={() => setShowKeyboard(false)}
+                          />
+                        </div>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -127,10 +172,21 @@ export function ServerLogForm({ onVisitRegistered }) {
                           placeholder="Ej: Juan Pérez García"
                           value={formData.nombre}
                           onChange={handleChange}
+                          onFocus={() => handleFieldFocus("nombre")}
                           required
                           className="bg-input border-border focus:outline-none focus:ring-2 focus:ring-primary/20 pl-10 pr-4 h-10 rounded-xl transition"
                         />
                       </div>
+                      {showKeyboard && activeField === "nombre" && (
+                        <div className="absolute top-full right-0 z-50 w-[90vw] md:w-[500px] animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
+                          <TecladoVirtual
+                            onKeyPress={handleVirtualKeyPress}
+                            onBackspace={handleVirtualBackspace}
+                            onSpace={handleVirtualSpace}
+                            onClose={() => setShowKeyboard(false)}
+                          />
+                        </div>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -145,10 +201,21 @@ export function ServerLogForm({ onVisitRegistered }) {
                           placeholder="Ej: SharshaSoft"
                           value={formData.empresa}
                           onChange={handleChange}
+                          onFocus={() => handleFieldFocus("empresa")}
                           required
                           className="bg-input border-border focus:outline-none focus:ring-2 focus:ring-primary/20 pl-10 pr-4 h-10 rounded-xl transition"
                         />
                       </div>
+                      {showKeyboard && activeField === "empresa" && (
+                        <div className="absolute top-full left-0 z-50 w-[90vw] md:w-[500px] animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
+                          <TecladoVirtual
+                            onKeyPress={handleVirtualKeyPress}
+                            onBackspace={handleVirtualBackspace}
+                            onSpace={handleVirtualSpace}
+                            onClose={() => setShowKeyboard(false)}
+                          />
+                        </div>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -222,14 +289,26 @@ export function ServerLogForm({ onVisitRegistered }) {
                         name="motivo"
                         value={formData.motivo}
                         onChange={handleChange}
+                        onFocus={() => handleFieldFocus("motivo")}
                         required
                         rows={10}
                         className="w-full bg-input border-border focus:outline-none focus:ring-2 focus:ring-chart-3/20 resize-none pl-4 pr-4 rounded-xl transition"
                       />
                     </div>
+                    {showKeyboard && activeField === "motivo" && (
+                      <div className="absolute top-full left-0 z-50 w-full animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
+                        <TecladoVirtual
+                          onKeyPress={handleVirtualKeyPress}
+                          onBackspace={handleVirtualBackspace}
+                          onSpace={handleVirtualSpace}
+                          onClose={() => setShowKeyboard(false)}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
 
+                {/* Botón de Submit */}
                 {/* Botón de Submit */}
                 <div className="pt-2">
                   <Button
