@@ -48,7 +48,7 @@ export default function Page() {
   }
 
   return (
-    <div className="h-screen bg-background p-4 relative overflow-hidden flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-background p-4 relative flex flex-col items-center justify-start pt-10 md:pt-24 pb-10">
       {/* Fondo decorativo con efecto tech */}
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none -z-10" />
       <div className="fixed top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent pointer-events-none z-50" />

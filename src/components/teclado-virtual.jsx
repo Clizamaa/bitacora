@@ -68,7 +68,7 @@ const TecladoVirtual = ({ onKeyPress, onBackspace, onSpace, onClose }) => {
     }, [onKeyPress, onBackspace, onSpace, onClose]);
 
     return (
-        <div className="bg-card rounded-lg border shadow-lg p-4 mt-2 w-full z-50">
+        <div className="bg-card rounded-lg border shadow-lg p-4 mt-2 w-full md:w-[550px] animate-in fade-in zoom-in-95 slide-in-from-top-2 duration-300">
             <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-foreground">Teclado Virtual</h3>
                 <Button
@@ -92,6 +92,7 @@ const TecladoVirtual = ({ onKeyPress, onBackspace, onSpace, onClose }) => {
                             variant="outline"
                             size="sm"
                             onClick={() => onKeyPress(num)}
+                            onMouseDown={(e) => e.preventDefault()}
                             className="w-10 h-10 text-sm font-medium"
                         >
                             {num}
@@ -108,6 +109,7 @@ const TecladoVirtual = ({ onKeyPress, onBackspace, onSpace, onClose }) => {
                             variant="outline"
                             size="sm"
                             onClick={() => onKeyPress(letter)}
+                            onMouseDown={(e) => e.preventDefault()}
                             className="w-10 h-10 text-sm font-medium"
                         >
                             {letter}
@@ -124,6 +126,7 @@ const TecladoVirtual = ({ onKeyPress, onBackspace, onSpace, onClose }) => {
                             variant="outline"
                             size="sm"
                             onClick={() => onKeyPress(letter)}
+                            onMouseDown={(e) => e.preventDefault()}
                             className="w-10 h-10 text-sm font-medium"
                         >
                             {letter}
@@ -140,6 +143,7 @@ const TecladoVirtual = ({ onKeyPress, onBackspace, onSpace, onClose }) => {
                             variant="outline"
                             size="sm"
                             onClick={() => onKeyPress(letter)}
+                            onMouseDown={(e) => e.preventDefault()}
                             className="w-10 h-10 text-sm font-medium"
                         >
                             {letter}
@@ -154,6 +158,7 @@ const TecladoVirtual = ({ onKeyPress, onBackspace, onSpace, onClose }) => {
                         variant="outline"
                         size="sm"
                         onClick={onSpace}
+                        onMouseDown={(e) => e.preventDefault()}
                         className="px-8 h-10 text-sm font-medium"
                     >
                         Espacio
@@ -163,6 +168,7 @@ const TecladoVirtual = ({ onKeyPress, onBackspace, onSpace, onClose }) => {
                         variant="outline"
                         size="sm"
                         onClick={onBackspace}
+                        onMouseDown={(e) => e.preventDefault()}
                         className="px-6 h-10 text-sm font-medium"
                     >
                         Borrar

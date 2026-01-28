@@ -89,14 +89,14 @@ export function ServerLogForm({ onVisitRegistered }) {
 
   return (
     <Card className="w-full max-w-5xl relative z-10 border border-border/50 shadow-xl bg-card/95 rounded-2xl">
-      <div className="md:grid md:grid-cols-12">
-        <div className="relative hidden md:block md:col-span-5 bg-secondary/15 border-r border-border/50">
+      <div className="lg:grid lg:grid-cols-12">
+        <div className="relative hidden lg:block lg:col-span-5 bg-secondary/15 border-r border-border/50">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(124, 156, 64, 0.93),transparent_60%)]" />
           <img src="/ilustracion.jpeg" alt="Ilustración acceso a sala de servidores" onError={(e) => (e.currentTarget.style.display = 'none')} className="absolute inset-0 w-full h-full object-contain" />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-background/60" />
         </div>
-        <div className="md:col-span-7">
-          <CardHeader className="space-y-1 py-5 border-b border-border/50 px-6 md:px-8">
+        <div className="lg:col-span-7">
+          <CardHeader className="space-y-1 py-5 border-b border-border/50 px-6 lg:px-8">
             <div className="flex items-center gap-3">
               <div className="rounded-xl bg-primary/10 p-3 ring-2 ring-primary/20">
                 <Server className="h-6 w-6 text-primary" />
@@ -108,7 +108,7 @@ export function ServerLogForm({ onVisitRegistered }) {
             </div>
           </CardHeader>
 
-          <CardContent className="pt-5 px-6 md:px-8">
+          <CardContent className="pt-5 px-6 lg:px-8">
             {submitted ? (
               <div className="flex flex-col items-center justify-center py-12 space-y-4 animate-in fade-in zoom-in duration-500">
                 <div className="rounded-full bg-accent/20 p-4 ring-4 ring-accent/30">
@@ -131,7 +131,7 @@ export function ServerLogForm({ onVisitRegistered }) {
                   </div>
 
                   <div className="grid gap-8 md:grid-cols-2">
-                    <div className="space-y-2">
+                    <div className={`space-y-2 ${(activeField === "rut" || activeField === "nombre") ? "relative z-50" : ""}`}>
                       <Label htmlFor="rut" className="text-foreground font-medium">
                         {"RUT"}
                       </Label>
@@ -148,8 +148,8 @@ export function ServerLogForm({ onVisitRegistered }) {
                           className="bg-input border-border focus:outline-none focus:ring-2 focus:ring-primary/20 pl-10 pr-4 h-10 rounded-xl transition w-full"
                         />
                       </div>
-                      {showKeyboard && activeField === "rut" && (
-                        <div className="absolute top-full left-0 z-50 w-[90vw] md:w-[500px] animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
+                      {showKeyboard && (activeField === "rut" || activeField === "nombre") && (
+                        <div className="top-full left-0 z-50 w-[90vw] md:w-[calc(200%+2rem)] animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
                           <TecladoVirtual
                             onKeyPress={handleVirtualKeyPress}
                             onBackspace={handleVirtualBackspace}
@@ -177,19 +177,10 @@ export function ServerLogForm({ onVisitRegistered }) {
                           className="bg-input border-border focus:outline-none focus:ring-2 focus:ring-primary/20 pl-10 pr-4 h-10 rounded-xl transition"
                         />
                       </div>
-                      {showKeyboard && activeField === "nombre" && (
-                        <div className="absolute top-full right-0 z-50 w-[90vw] md:w-[500px] animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
-                          <TecladoVirtual
-                            onKeyPress={handleVirtualKeyPress}
-                            onBackspace={handleVirtualBackspace}
-                            onSpace={handleVirtualSpace}
-                            onClose={() => setShowKeyboard(false)}
-                          />
-                        </div>
-                      )}
+
                     </div>
 
-                    <div className="space-y-2">
+                    <div className={`space-y-2 ${activeField === "empresa" ? "relative z-50" : ""}`}>
                       <Label htmlFor="empresa" className="text-foreground font-medium">
                         {"Empresa"}
                       </Label>
@@ -207,7 +198,7 @@ export function ServerLogForm({ onVisitRegistered }) {
                         />
                       </div>
                       {showKeyboard && activeField === "empresa" && (
-                        <div className="absolute top-full left-0 z-50 w-[90vw] md:w-[500px] animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
+                        <div className="top-full left-0 z-50 w-[90vw] md:w-[calc(200%+2rem)] animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
                           <TecladoVirtual
                             onKeyPress={handleVirtualKeyPress}
                             onBackspace={handleVirtualBackspace}
@@ -296,7 +287,7 @@ export function ServerLogForm({ onVisitRegistered }) {
                       />
                     </div>
                     {showKeyboard && activeField === "motivo" && (
-                      <div className="absolute top-full left-0 z-50 w-full animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
+                      <div className="top-full left-0 z-50 w-[550px] animate-in slide-in-from-top-2 fade-in duration-200 shadow-2xl rounded-lg">
                         <TecladoVirtual
                           onKeyPress={handleVirtualKeyPress}
                           onBackspace={handleVirtualBackspace}
