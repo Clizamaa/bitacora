@@ -40,6 +40,6 @@ export async function POST(request) {
         return NextResponse.json(visita);
     } catch (error) {
         console.error('Error creating visita:', error);
-        return NextResponse.json({ error: 'Error creating visita' }, { status: 500 });
+        return NextResponse.json({ error: 'Error creating visita', details: error.message }, { status: 500 });
     }
 }
