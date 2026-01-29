@@ -31,4 +31,5 @@ model Documento {
   fecha     DateTime @default(now())
   visitaId  Int
   visita    Visita   @relation(fields: [visitaId], references: [id])
+  url       String?
 }

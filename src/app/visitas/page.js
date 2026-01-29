@@ -51,7 +51,7 @@ export default function VisitasPage() {
     }
   }
 
-  const handleFileUpload = async (id, fileName, type) => {
+  const handleFileUpload = async (id, fileName, type, url) => {
     try {
       const res = await fetch(`/api/documentos`, {
         method: 'POST',
@@ -59,7 +59,8 @@ export default function VisitasPage() {
         body: JSON.stringify({
           visitaId: id,
           nombre: fileName,
-          tipo: type
+          tipo: type,
+          url: url
         })
       })
       if (res.ok) {

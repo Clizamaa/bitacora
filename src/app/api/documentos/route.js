@@ -9,7 +9,8 @@ export async function POST(request) {
             data: {
                 nombre: data.nombre,
                 tipo: data.tipo,
-                visitaId: parseInt(data.visitaId)
+                visitaId: parseInt(data.visitaId),
+                url: data.url
             }
         });
 

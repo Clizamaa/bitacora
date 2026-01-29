@@ -131,7 +131,7 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
         const result = await res.json()
 
         if (result.success) {
-          onFileUpload(uploadingId, result.fileName, uploadType)
+          onFileUpload(uploadingId, result.fileName, uploadType, result.url)
           Swal.fire({
             title: "¡Archivo Subido!",
             text: `Se ha adjuntado "${result.fileName}" correctamente al servidor.`,
@@ -563,22 +563,76 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
             <div className="p-4 border-b border-border/50 flex justify-between items-center bg-muted/30">
               <h3 className="text-lg font-bold flex items-center gap-2">
                 <AdobeIcon className="h-5 w-5 text-red-600" />
-                Documento: {previewFile}
+                Documento
               </h3>
-              <button
-                onClick={() => setPreviewFile(null)}
-                className="p-2 rounded-full hover:bg-muted transition-colors"
-                title="Cerrar vista previa"
-              >
-                <XCircle className="h-6 w-6 text-muted-foreground hover:text-foreground" />
-              </button>
+              <div className="flex items-center gap-2">
+                <a
+                  href={previewFile.startsWith('http') ? previewFile : `/upload/${previewFile}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full hover:bg-muted transition-colors text-blue-600 hover:text-blue-700"
+                  title="Descargar Documento"
+                >
+                  <FileDown className="h-6 w-6" />
+                </a>
+                <button
+                  onClick={() => setPreviewFile(null)}
+                  className="p-2 rounded-full hover:bg-muted transition-colors"
+                  title="Cerrar vista previa"
+                >
+                  <XCircle className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+                </button>
+              </div>
             </div>
-            <div className="flex-1 bg-white relative">
-              <iframe
-                src={`/upload/${previewFile}`}
-                className="w-full h-full"
-                title="Vista previa del documento"
-              />
+            <div className="flex-1 bg-white relative overflow-hidden flex items-center justify-center bg-gray-100">
+              {(() => {
+                const fileUrl = previewFile.startsWith('http') ? previewFile : `/upload/${previewFile}`
+                const isPdf = fileUrl.toLowerCase().endsWith('.pdf')
+                const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileUrl)
+
+                if (isPdf) {
+                  return (
+                    <div className="flex flex-col items-center justify-center h-full gap-6 text-center p-6 bg-muted/20">
+                      <div className="p-4 rounded-full bg-red-100 text-red-600">
+                        <AdobeIcon className="h-16 w-16" />
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-lg font-medium text-foreground">Vista previa no disponible aquí</p>
+                        <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                          Tu navegador prefiere abrir este tipo de archivos en una pestaña separada.
+                        </p>
+                      </div>
+                      <a
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
+                      >
+                        <FileDown className="h-5 w-5" />
+                        Abrir Documento PDF
+                      </a>
+                    </div>
+                  )
+                }
+
+                if (isImage) {
+                  return (
+                    <img
+                      src={fileUrl}
+                      alt="Vista previa"
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  )
+                }
+
+                return (
+                  <iframe
+                    src={fileUrl}
+                    className="w-full h-full"
+                    title="Vista previa del documento"
+                  />
+                )
+              })()}
             </div>
           </div>
         </div>
@@ -669,7 +723,7 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
                     <button
                       key={index}
                       onClick={() => {
-                        setPreviewFile(doc.name)
+                        setPreviewFile(doc.url || doc.name)
                         setShowDownloadModal(false)
                       }}
                       className="flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-muted/50 transition-all hover:border-primary/50 group"
