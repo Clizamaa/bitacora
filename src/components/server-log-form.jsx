@@ -282,7 +282,7 @@ export function ServerLogForm({ onVisitRegistered }) {
                         onChange={handleChange}
                         onFocus={() => handleFieldFocus("motivo")}
                         required
-                        rows={10}
+                        rows={4}
                         className="w-full bg-input border-border focus:outline-none focus:ring-2 focus:ring-chart-3/20 resize-none pl-4 pr-4 rounded-xl transition"
                       />
                     </div>

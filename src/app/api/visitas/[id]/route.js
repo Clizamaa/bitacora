@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 export async function PUT(request, { params }) {
-    const { id } = params;
+    const { id } = await params;
 
     try {
         const data = await request.json();
@@ -24,6 +24,6 @@ export async function PUT(request, { params }) {
         return NextResponse.json(updatedVisita);
     } catch (error) {
         console.error('Error updating visita:', error);
-        return NextResponse.json({ error: 'Error updating visita' }, { status: 500 });
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

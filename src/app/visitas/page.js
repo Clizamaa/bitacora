@@ -41,11 +41,13 @@ export default function VisitasPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fechaFin, horaFin })
       })
-      if (res.ok) {
-        fetchVisitas()
+      if (!res.ok) {
+        throw new Error('Failed to close visit')
       }
+      await fetchVisitas()
     } catch (e) {
       console.error("Error closing visit", e)
+      throw e
     }
   }
 

@@ -38,7 +38,7 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
     setVisitaToClose(visita)
   }
 
-  const confirmClose = () => {
+  const confirmClose = async () => {
     if (!visitaToClose || !closeDate) return
 
     const dateObj = new Date(closeDate)
@@ -68,20 +68,31 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
       minute: "2-digit",
     })
 
-    onCloseVisita(visitaToClose.id, fecha, hora)
+    try {
+      await onCloseVisita(visitaToClose.id, fecha, hora)
 
-    setVisitaToClose(null)
-    setCloseDate("")
+      setVisitaToClose(null)
+      setCloseDate("")
 
-    Swal.fire({
-      title: "¡Cerrado!",
-      text: "La visita ha sido finalizada correctamente.",
-      icon: "success",
-      timer: 2000,
-      showConfirmButton: false,
-      background: "var(--card)",
-      color: "var(--foreground)",
-    })
+      Swal.fire({
+        title: "¡Cerrado!",
+        text: "La visita ha sido finalizada correctamente.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+        background: "var(--card)",
+        color: "var(--foreground)",
+      })
+    } catch (error) {
+      console.error("Error al cerrar visita:", error)
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo finalizar la visita. Por favor intente nuevamente.",
+        icon: "error",
+        background: "var(--card)",
+        color: "var(--foreground)",
+      })
+    }
   }
 
   const handleOpenUploadModal = (id) => {
