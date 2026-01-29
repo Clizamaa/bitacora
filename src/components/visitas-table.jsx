@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import Swal from "sweetalert2"
-import { Info, XCircle, CheckCircle2, Clock, Calendar, FileUp, FileDown, FileText } from "lucide-react"
+import { Info, XCircle, CheckCircle2, Clock, Calendar, FileUp, FileDown, FileText, Loader2 } from "lucide-react"
 import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
 import dynamic from 'next/dynamic'
@@ -28,6 +28,7 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
   const fileInputRef = useRef(null)
   const [uploadingId, setUploadingId] = useState(null)
   const [previewFile, setPreviewFile] = useState(null)
+  const [isUploading, setIsUploading] = useState(false)
 
 
   const [showUploadModal, setShowUploadModal] = useState(false)
@@ -119,10 +120,7 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
   const handleFileChange = async (e) => {
     const file = e.target.files[0]
     if (file && uploadingId) {
-      // Optional: You could rename the file based on uploadType here if needed
-      // const fileName = uploadType === 'ACTA' ? `ACTA_${file.name}` : `OT_${file.name}`
-      // For now using original name as per request simplicity
-
+      setIsUploading(true)
       try {
         const formData = new FormData()
         formData.append('file', file)
@@ -145,6 +143,9 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
             background: "var(--card)",
             color: "var(--foreground)",
           })
+          setShowUploadModal(false)
+          setUploadingId(null)
+          setUploadType(null)
         } else {
           throw new Error(result.message || 'Error al subir archivo')
         }
@@ -157,12 +158,10 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
           background: "var(--card)",
           color: "var(--foreground)",
         })
+      } finally {
+        setIsUploading(false)
+        e.target.value = "" // Reset input
       }
-
-      e.target.value = "" // Reset input
-      setShowUploadModal(false)
-      setUploadingId(null)
-      setUploadType(null)
     }
   }
 
@@ -649,31 +648,40 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
                 </p>
 
                 <div className="grid gap-3">
-                  <button
-                    onClick={() => triggerFileUpload('OT')}
-                    className="flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-muted/50 transition-all hover:border-primary/50 group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500 group-hover:bg-orange-500/20">
-                        <FileText className="h-5 w-5" />
-                      </div>
-                      <span className="font-medium text-foreground">Orden de Trabajo</span>
+                  {isUploading ? (
+                    <div className="flex flex-col items-center justify-center p-8 text-center space-y-4">
+                      <Loader2 className="h-10 w-10 text-primary animate-spin" />
+                      <p className="text-sm font-medium text-muted-foreground">Subiendo archivo, por favor espere...</p>
                     </div>
-                    <FileUp className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-                  </button>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => triggerFileUpload('OT')}
+                        className="flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-muted/50 transition-all hover:border-primary/50 group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500 group-hover:bg-orange-500/20">
+                            <FileText className="h-5 w-5" />
+                          </div>
+                          <span className="font-medium text-foreground">Orden de Trabajo</span>
+                        </div>
+                        <FileUp className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                      </button>
 
-                  <button
-                    onClick={() => triggerFileUpload('ACTA')}
-                    className="flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-muted/50 transition-all hover:border-primary/50 group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-blue-500/10 text-blue-500 group-hover:bg-blue-500/20">
-                        <FileDown className="h-5 w-5" />
-                      </div>
-                      <span className="font-medium text-foreground">Acta de Visita</span>
-                    </div>
-                    <FileUp className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-                  </button>
+                      <button
+                        onClick={() => triggerFileUpload('ACTA')}
+                        className="flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-muted/50 transition-all hover:border-primary/50 group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-blue-500/10 text-blue-500 group-hover:bg-blue-500/20">
+                            <FileDown className="h-5 w-5" />
+                          </div>
+                          <span className="font-medium text-foreground">Acta de Visita</span>
+                        </div>
+                        <FileUp className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
