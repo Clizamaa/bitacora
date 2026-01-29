@@ -19,12 +19,17 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    const isPdf = file.name.toLowerCase().endsWith('.pdf');
+    const resourceType = isPdf ? 'raw' : 'auto';
+
     return new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
             {
-                resource_type: "auto",
-                // Optional: add folder or tags
-                folder: "bitacora_visitas"
+                resource_type: resourceType,
+                folder: "bitacora_visitas",
+                use_filename: true,
+                unique_filename: true,
+                filename_override: file.name
             },
             (error, result) => {
                 if (error) {

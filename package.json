@@ -16,6 +16,7 @@
     "next-cloudinary": "^6.17.5",
     "react": "19.2.1",
     "react-dom": "19.2.1",
+    "react-pdf": "^10.3.0",
     "sweetalert2": "^11.26.17"
   },
   "devDependencies": {

@@ -5,6 +5,9 @@ import Swal from "sweetalert2"
 import { Info, XCircle, CheckCircle2, Clock, Calendar, FileUp, FileDown, FileText } from "lucide-react"
 import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
+import dynamic from 'next/dynamic'
+
+const PdfViewer = dynamic(() => import('./pdf-viewer'), { ssr: false })
 
 export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
 
@@ -25,6 +28,7 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
   const fileInputRef = useRef(null)
   const [uploadingId, setUploadingId] = useState(null)
   const [previewFile, setPreviewFile] = useState(null)
+
 
   const [showUploadModal, setShowUploadModal] = useState(false)
   const [showDownloadModal, setShowDownloadModal] = useState(false)
@@ -591,28 +595,8 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
                 const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileUrl)
 
                 if (isPdf) {
-                  return (
-                    <div className="flex flex-col items-center justify-center h-full gap-6 text-center p-6 bg-muted/20">
-                      <div className="p-4 rounded-full bg-red-100 text-red-600">
-                        <AdobeIcon className="h-16 w-16" />
-                      </div>
-                      <div className="space-y-2">
-                        <p className="text-lg font-medium text-foreground">Vista previa no disponible aquí</p>
-                        <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-                          Tu navegador prefiere abrir este tipo de archivos en una pestaña separada.
-                        </p>
-                      </div>
-                      <a
-                        href={fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
-                      >
-                        <FileDown className="h-5 w-5" />
-                        Abrir Documento PDF
-                      </a>
-                    </div>
-                  )
+                  const proxyUrl = `/api/proxy-pdf?url=${encodeURIComponent(fileUrl)}`
+                  return <PdfViewer fileUrl={proxyUrl} />
                 }
 
                 if (isImage) {
