@@ -596,7 +596,13 @@ export function VisitasTable({ visitas, onCloseVisita, onFileUpload }) {
 
                 if (isPdf) {
                   const proxyUrl = `/api/proxy-pdf?url=${encodeURIComponent(fileUrl)}`
-                  return <PdfViewer fileUrl={proxyUrl} />
+                  return (
+                    <iframe
+                      src={proxyUrl}
+                      className="w-full h-full"
+                      title="Vista previa PDF"
+                    />
+                  )
                 }
 
                 if (isImage) {
