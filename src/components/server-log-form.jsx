@@ -28,10 +28,11 @@ export function ServerLogForm({ onVisitRegistered }) {
   const [activeField, setActiveField] = useState(null)
   const [showKeyboard, setShowKeyboard] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (onVisitRegistered) {
-      onVisitRegistered(formData)
+      const result = await onVisitRegistered(formData)
+      if (result === false) return
     }
     setSubmitted(true)
     setShowKeyboard(false)

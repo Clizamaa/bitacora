@@ -4,6 +4,7 @@ import { ServerLogForm } from "@/components/server-log-form"
 import Link from "next/link"
 import { ClipboardList, LogOut } from "lucide-react"
 import { useRouter } from "next/navigation"
+import Swal from "sweetalert2"
 
 export default function Page() {
   const router = useRouter()
@@ -37,13 +38,33 @@ export default function Page() {
         body: JSON.stringify(body)
       })
 
+      const data = await res.json()
+
       if (res.ok) {
         setTimeout(() => {
           router.push("/visitas")
         }, 3000)
+        return true
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: data.details || data.error || 'Error al registrar visita',
+          icon: 'error',
+          background: "var(--card)",
+          color: "var(--foreground)"
+        })
+        return false
       }
     } catch (e) {
       console.error("Error creating visit", e)
+      Swal.fire({
+        title: 'Error',
+        text: 'Error de conexión con el servidor',
+        icon: 'error',
+        background: "var(--card)",
+        color: "var(--foreground)"
+      })
+      return false
     }
   }
 
