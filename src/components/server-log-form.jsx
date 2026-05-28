@@ -230,7 +230,7 @@ export function ServerLogForm({ onVisitRegistered }) {
                           className="bg-input border-border focus:outline-none focus:ring-2 focus:ring-primary/20 pl-10 pr-4 h-10 rounded-xl transition w-full appearance-none"
                         >
                           <option value="" disabled>Seleccione autorizador</option>
-                          <option value="Alvaro Salgado">Alvaro Salgado</option>
+                          <option value="Enrique Cid">Enrique Cid</option>
                           <option value="Ricardo Sanhueza">Ricardo Sanhueza</option>
                         </Select>
                       </div>
