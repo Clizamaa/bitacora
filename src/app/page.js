@@ -85,7 +85,7 @@ export default function Page() {
 
       {/* Botón Salir */}
       <Link
-        href="https://10.8.245.100:8084/"
+        href="https://prestamos.chrisapp.dev/"
         className="fixed bottom-4 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 backdrop-blur text-foreground px-4 py-2 shadow-lg transition-all hover:bg-red-500/50 hover:border-red-200"
       >
         <LogOut className="h-4 w-4" />

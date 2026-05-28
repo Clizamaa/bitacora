@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { Server, Clock, Building2, User, FileText, CheckCircle2, CreditCard, UserCheck, Keyboard } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Server, Clock, Building2, User, FileText, CheckCircle2, CreditCard, UserCheck } from "lucide-react"
 import TecladoVirtual from "@/components/teclado-virtual"
 
 const Card = ({ className, children }) => <div className={className}>{children}</div>
@@ -27,6 +27,11 @@ export function ServerLogForm({ onVisitRegistered }) {
   const [submitted, setSubmitted] = useState(false)
   const [activeField, setActiveField] = useState(null)
   const [showKeyboard, setShowKeyboard] = useState(false)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
+
+  useEffect(() => {
+    setIsTouchDevice(navigator.maxTouchPoints > 0 && window.matchMedia("(pointer: coarse)").matches)
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -61,7 +66,7 @@ export function ServerLogForm({ onVisitRegistered }) {
 
   const handleFieldFocus = (fieldName) => {
     setActiveField(fieldName)
-    setShowKeyboard(true)
+    if (isTouchDevice) setShowKeyboard(true)
   }
 
   const handleVirtualKeyPress = (key) => {
